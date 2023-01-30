@@ -1,8 +1,8 @@
 package com.example.resourceserver.controllers;
 
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,5 +26,17 @@ public class UserController {
     @GetMapping("/secured-forbidden")
     public String getMethodLevelSecurityForbiddenMessage() {
         return "Ты этого не получишь =)";
+    }
+
+    @PreAuthorize("hasRole('developer')")
+    @GetMapping("/preAuthorize-developer")
+    public String getPreAuthorizeMessage() {
+        return "PreAuthorizeMessage!!! -> hasRole('developer')";
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_developer')")
+    @GetMapping("/preAuthorize-role-developer")
+    public String getPreAuthorizeMessageSecond() {
+        return "PreAuthorizeMessage!!! -> hasAuthority('ROLE_developer')";
     }
 }
