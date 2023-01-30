@@ -1,6 +1,7 @@
 package com.example.resourceserver.controllers;
 
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -47,5 +48,13 @@ public class UserController {
     @GetMapping("/jwt-info/{id}")
     public String getJwtInfo(@PathVariable String id, @AuthenticationPrincipal Jwt jwt) {
         return jwt.getSubject();
+    }
+
+    @PostAuthorize("returnObject == #number")
+    @GetMapping("/post-authorize/{number}")
+    public String getPostAuthorizeMessage(@PathVariable String number) {
+        System.out.println("Этот метод отработал до того, как ты не прошел @PostAuthorize");
+        System.out.println("Мой запрос в Postman выглядит вот так - http://localhost:8091/users/post-authorize/10");
+        return "10";
     }
 }
