@@ -2,7 +2,10 @@ package com.example.resourceserver.controllers;
 
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -38,5 +41,11 @@ public class UserController {
     @GetMapping("/preAuthorize-role-developer")
     public String getPreAuthorizeMessageSecond() {
         return "PreAuthorizeMessage!!! -> hasAuthority('ROLE_developer')";
+    }
+
+    @PreAuthorize("hasAuthority('ROLE_user') or #id == #jwt.getSubject()")
+    @GetMapping("/jwt-info/{id}")
+    public String getJwtInfo(@PathVariable String id, @AuthenticationPrincipal Jwt jwt) {
+        return jwt.getSubject();
     }
 }
