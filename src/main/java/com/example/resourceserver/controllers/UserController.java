@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Collections;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -57,4 +60,13 @@ public class UserController {
         System.out.println("Мой запрос в Postman выглядит вот так - http://localhost:8091/users/post-authorize/10");
         return "10";
     }
+
+    @Secured("ROLE_developer")
+    @GetMapping("/resource-server")
+    public String getPostAuthorizeMessage(@AuthenticationPrincipal Jwt jwt) {
+        String tokenValue = jwt.getTokenValue();
+        System.out.println(tokenValue);
+        return "resource-server передаёт привет";
+    }
+
 }
