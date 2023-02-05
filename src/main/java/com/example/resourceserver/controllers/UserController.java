@@ -1,5 +1,7 @@
 package com.example.resourceserver.controllers;
 
+import com.example.resourceserver.rest.client.KeycloakClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,12 +12,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
-import java.util.Map;
-
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    @Autowired
+    private KeycloakClient keycloakClient;
+
+    @GetMapping("/getUser/{name}")
+    public String getUserByUserName(@PathVariable String name) {
+        return keycloakClient.findByUsername(name);
+    }
 
     @GetMapping
     public String getMessage() {
